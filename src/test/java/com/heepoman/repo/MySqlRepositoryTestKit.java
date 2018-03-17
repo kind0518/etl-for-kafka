@@ -10,17 +10,17 @@ import java.util.Date;
 
 public class MySqlRepositoryTestKit {
 
-  StringBuilder sb = new StringBuilder();
-  MySqlDriver driver = new MySqlDriver();
+  private MySqlDriver driver = new MySqlDriver();
+
+  protected Long eventId = 12345678911L;
+  protected String eventTimestamp = new Date().toString();
+  protected String serviceCode = "SERVICE_CODE";
+  protected String eventContext = "EVENT_CONTEXT";
 
   @Before
   public void initForTest() throws SQLException {
     Connection conn = driver.getConnection();
     Statement stmt = conn.createStatement();
-    Long eventId = 12345678911L;
-    String eventTimestamp = new Date().toString();
-    String serviceCode = "service";
-    String eventContext = "EVENT_CONTEXT";
 
     String initTableQ = "DROP TABLE IF EXISTS event CASCADE;";
     String createTableQ = "CREATE TABLE event(event_id BIGINT not null, event_timestamp character varying(255) not null, service_code character varying(255), event_context character varying(255));";

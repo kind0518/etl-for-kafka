@@ -35,7 +35,7 @@ public class MySqlDriver implements RepositoryDriver {
       this.userName = props.getProperty("mysql.username");
       this.password = props.getProperty("mysql.password");
 
-      Class.forName("com.mysql.jdbc.Driver");
+      Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (ClassNotFoundException ex) {
       logger.error(ex.getMessage());
     } catch (IOException ex) {

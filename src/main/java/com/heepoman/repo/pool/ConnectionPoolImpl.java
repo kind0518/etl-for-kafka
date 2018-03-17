@@ -42,7 +42,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
     }, HEALTH_CHECK_INTERVAL, HEALTH_CHECK_INTERVAL, TimeUnit.SECONDS);
   }
 
-  private void createConnection() throws ConnectionPoolException {
+  private void createConnection() {
     while(connectionPool.size() < poolSize) {
       try {
         connectionPool.put(driver.getConnection());
