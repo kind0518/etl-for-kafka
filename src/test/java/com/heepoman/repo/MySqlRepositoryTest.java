@@ -1,42 +1,34 @@
 package com.heepoman.repo;
 
+import com.heepoman.repo.exception.ConnectionPoolException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
-public class MySqlRepositoryTest {
-
+public class MySqlRepositoryTest extends MySqlRepositoryTestKit {
   MySqlRepository repo = new MySqlRepository();
 
   @Test
   public void createEventData() throws SQLException, InterruptedException, ExecutionException {
     Long eventId = 12345678910L;
     String timestamp = new Date().toString();
-    Optional<String> serviceCodeOpt = Optional.of("service_code");
-    Optional<String> eventContextOpt = Optional.of("event_context");
+    Optional<String> serviceCodeOpt = Optional.of("SERVICE_CODE");
+    Optional<String> eventContextOpt = Optional.of("EVENT_CONTEXT");
 
     CompletableFuture<Void> resultF = repo.createEventData(eventId, timestamp, serviceCodeOpt, eventContextOpt);
-    CompletableFuture<Void> resultF2 = repo.createEventData(eventId, timestamp, serviceCodeOpt, eventContextOpt);
-    CompletableFuture<Void> resultF3 = repo.createEventData(eventId, timestamp, serviceCodeOpt, eventContextOpt);
-    CompletableFuture<Void> resultF4 = repo.createEventData(eventId, timestamp, serviceCodeOpt, eventContextOpt);
-
-    Assert.assertEquals(resultF.get(), CompletableFuture.runAsync(() -> {}).get());
-    Assert.assertEquals(resultF2.get(), CompletableFuture.runAsync(() -> {}).get());
-    Assert.assertEquals(resultF3.get(), CompletableFuture.runAsync(() -> {}).get());
-    Assert.assertEquals(resultF4.get(), CompletableFuture.runAsync(() -> {}).get());
-
+    Assert.assertEquals(CompletableFuture.completedFuture(null).get(), resultF.get());
   }
 
   @Test
-  public void getEventData() throws SQLException {
-    Long eventId = 12345678910L;
-
-//    repo.getEventData(eventId);
+  public void getEventData() throws SQLException, ConnectionPoolException, InterruptedException, ExecutionException{
+    Long eventId = 12345678911L;
+    CompletableFuture<ResultSet> resultF = repo.getEventData(eventId);
+    Assert.assertTrue(resultF.get().next());
   }
 }
