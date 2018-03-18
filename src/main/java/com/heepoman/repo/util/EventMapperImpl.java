@@ -1,6 +1,7 @@
 package com.heepoman.repo.util;
 
 import com.heepoman.model.Event;
+import com.heepoman.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class EventMapperImpl implements Mapper<ResultSet, Optional<Event>>{
+public class EventMapperImpl implements Mapper<ResultSet, Optional<Event>> {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
 

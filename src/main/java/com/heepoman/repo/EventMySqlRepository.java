@@ -6,7 +6,7 @@ import com.heepoman.repo.exception.ConnectionPoolException;
 import com.heepoman.repo.pool.ConnectionPool;
 import com.heepoman.repo.pool.ConnectionPoolImpl;
 import com.heepoman.repo.util.CreateEventSQLSpecImpl;
-import com.heepoman.repo.util.Mapper;
+import com.heepoman.util.Mapper;
 import com.heepoman.repo.util.EventMapperImpl;
 import com.heepoman.repo.util.SQLSpec;
 import org.slf4j.Logger;
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 public class EventMySqlRepository implements Repository<Optional<Event>> {
 

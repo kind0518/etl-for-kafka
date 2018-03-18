@@ -4,21 +4,16 @@ import com.heepoman.model.Event;
 import com.heepoman.repo.exception.ConnectionPoolException;
 import com.heepoman.repo.util.EventMapperImpl;
 import com.heepoman.repo.util.GetEventByIdSQLSpecImpl;
-import com.heepoman.repo.util.Mapper;
-import com.heepoman.repo.util.SQLSpec;
-import org.junit.Assert;
+import com.heepoman.util.Mapper;
 import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class EventMySqlRepositoryTest extends MySqlRepositoryTestKit {
   EventMySqlRepository repo = new EventMySqlRepository();
