@@ -6,7 +6,10 @@ import com.heepoman.window.EventSlidingWindow;
 import com.heepoman.window.Window;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -15,7 +18,8 @@ import static org.mockito.Mockito.*;
 
 public class DeduplicationTransFormTest extends TransFormTestKit {
 
-  TransForm deduplicationTransform = new DeduplicationTransForm("eventId", "event-window");
+  Set<String> filterKeys = new HashSet<String>(Arrays.asList("eventId", "serviceCodeOpt", "eventContextOpt"));
+  TransForm deduplicationTransform = new DeduplicationTransForm(filterKeys, "event-window");
 
   Window slidingWindow = mock(EventSlidingWindow.class);
   EventMySqlRepository eventRepo = mock(EventMySqlRepository.class);

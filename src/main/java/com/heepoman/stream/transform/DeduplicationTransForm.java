@@ -8,45 +8,59 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.InvalidParameterException;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class DeduplicationTransForm implements TransForm<String> {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  private String filterKey;
+  private Set<String> filterKeys;
   private String targetWindow;
 
-  public DeduplicationTransForm(String filterKey, String targetWindow) {
-    this.filterKey = filterKey;
+  public DeduplicationTransForm(Set<String> filterKeys, String targetWindow) {
+    this.filterKeys = filterKeys;
     this.targetWindow = targetWindow;
   }
+
+  private Set<Boolean>checkDuplicateByFilterKeys(Event existingEvent, Event newEvent, Set<String> filterKeys) {
+    Set<Boolean> isDuplicatedByFilters = new HashSet<Boolean>();
+    filterKeys.stream().forEach(filterKey -> {
+        try {
+          Object newEventFieldValue = newEvent.getClass().getDeclaredField(filterKey).get(newEvent);
+          isDuplicatedByFilters.add(existingEvent.getClass().getDeclaredField(filterKey).get(existingEvent).equals(newEventFieldValue));
+        } catch (NoSuchFieldException ex) {
+          logger.error(ex.getMessage());
+        } catch (IllegalAccessException ex) {
+          logger.error(ex.getMessage());
+        }
+      });
+    return isDuplicatedByFilters;
+  }
+
 
   @Override
   public void process(String data, Window window, Repository repo) {
     if (this.targetWindow.equals("event-window")) {
       synchronized (this) {
         EventSlidingWindow esw = (EventSlidingWindow) window;
-        Event eventData = new StringToEventMapperImpl().map(data);
-        esw.keepWindowSizeForDuration(eventData);
+        Event newEvent = new StringToEventMapperImpl().map(data);
+        esw.keepWindowSizeForDuration(newEvent);
 
-        boolean isExistData = esw.getWindowTable().stream().anyMatch(e -> {
-          try {
-            return e.getClass().getDeclaredField(this.filterKey).get(e).equals(eventData.eventId);
-          } catch (NoSuchFieldException ex) {
-            logger.error(ex.getMessage());
-            return false;
-          } catch (IllegalAccessException ex) {
-            logger.error(ex.getMessage());
-            return false;
-          }
+        boolean isExistData = esw.getWindowTable().stream().anyMatch(existingEvent -> {
+          Set<Boolean> isDupByFilterKeys = checkDuplicateByFilterKeys(existingEvent, newEvent, this.filterKeys);
+          boolean isContainTrue = isDupByFilterKeys.contains(true);
+          boolean isSizeOne = isDupByFilterKeys.size() == 1;
+          return isContainTrue && isSizeOne;
         });
         if(!isExistData) {
-          repo.add(Optional.of(eventData)).thenRun(() -> {
-            esw.setData(eventData);
+          repo.add(Optional.of(newEvent)).thenRun(() -> {
+            esw.setData(newEvent);
+            logger.info("this event data successfully loaded to target database : " + newEvent);
           });
         } else {
-          logger.info(String.format("this event data already exist on window size. %s", eventData));
+          logger.info(String.format("this event data already exist on window size. %s", newEvent));
         }
       }
     } else {
