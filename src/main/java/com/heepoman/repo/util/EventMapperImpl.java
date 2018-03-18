@@ -30,7 +30,6 @@ public class EventMapperImpl implements Mapper<ResultSet, Optional<Event>>{
         return Optional.empty();
       }
     } catch (SQLException ex) {
-      System.out.println("?설마");
       logger.error(ex.getMessage());
       return Optional.empty();
     }

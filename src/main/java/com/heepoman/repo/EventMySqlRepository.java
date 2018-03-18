@@ -5,6 +5,7 @@ import com.heepoman.repo.driver.MySqlDriver;
 import com.heepoman.repo.exception.ConnectionPoolException;
 import com.heepoman.repo.pool.ConnectionPool;
 import com.heepoman.repo.pool.ConnectionPoolImpl;
+import com.heepoman.repo.util.CreateEventSQLSpecImpl;
 import com.heepoman.repo.util.Mapper;
 import com.heepoman.repo.util.EventMapperImpl;
 import com.heepoman.repo.util.SQLSpec;
@@ -31,17 +32,13 @@ public class EventMySqlRepository implements Repository<Optional<Event>> {
     return CompletableFuture.runAsync(() -> {
       synchronized (this) {
         Optional<Connection> connOpt = Optional.empty();
-        Optional<PreparedStatement> stmtOpt = Optional.empty();
+        Optional<Statement> stmtOpt = Optional.empty();
         try {
           connOpt = Optional.of(repo.getConnectionFromPool());
-          stmtOpt = Optional.of(connOpt.get().prepareStatement("INSERT INTO event(event_id, event_timestamp, service_code, event_context) VALUES (?, ?, ?, ?)"));
-          if(eventOpt.isPresent()) {
+          stmtOpt = Optional.of(connOpt.get().createStatement());
+          if (eventOpt.isPresent()) {
             final Event e = eventOpt.get();
-            stmtOpt.get().setLong(1, e.eventId);
-            stmtOpt.get().setString(2, e.eventTimestamp);
-            stmtOpt.get().setString(3, e.serviceCodeOpt.orElse(null));
-            stmtOpt.get().setString(4, e.eventContextOpt.orElse(null));
-            stmtOpt.get().executeUpdate();
+            stmtOpt.get().executeUpdate(new CreateEventSQLSpecImpl(e.eventId, e.eventTimestamp, e.serviceCodeOpt, e.eventContextOpt).toQuery());
           } else {
             logger.error("parameter `event` does not exist.");
           }
