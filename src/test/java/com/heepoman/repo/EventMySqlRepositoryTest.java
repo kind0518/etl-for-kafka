@@ -16,26 +16,28 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.Assert.*;
 
 public class EventMySqlRepositoryTest extends MySqlRepositoryTestKit {
-  EventMySqlRepository repo = new EventMySqlRepository();
+
+  private final EventMySqlRepository repo = new EventMySqlRepository();
   private final Mapper<ResultSet, Optional<Event>> toEventOpt = new EventMapperImpl();
 
   @Test
   public void add() throws SQLException, ExecutionException, InterruptedException{
-    Long eventId = 12345678910L;
-    Event event = new Event(eventId, eventTimestamp, Optional.of(serviceCode), Optional.of(eventContext));
+    final Long eventId = 12345678910L;
+    final Event event = new Event(eventId, eventTimestamp, Optional.of(serviceCode), Optional.of(eventContext));
+    final CompletableFuture<Void> resultF = repo.add(Optional.of(event));
 
-    CompletableFuture<Void> resultF = repo.add(Optional.of(event));
     assertEquals(CompletableFuture.completedFuture(null).get(), resultF.get());
   }
 
   @Test
   public void getEventData() throws SQLException, ConnectionPoolException, InterruptedException, ExecutionException {
-    Long eventId = 12345678911L;
+    final Long eventId = 12345678911L;
+    final Event result = repo.query(new GetEventByIdSQLSpecImpl(eventId)).get().get();
 
-    Event result = repo.query(new GetEventByIdSQLSpecImpl(eventId)).get().get();
-    assertTrue(result.eventId.equals(eventId));
-    assertTrue(result.eventContextOpt.get().equals(eventContext));
-    assertTrue(result.serviceCodeOpt.get().equals(serviceCode));
-    assertNotNull(result.eventTimestamp);
+    assertTrue(result.getEventId().equals(eventId));
+    assertTrue(result.getEventContextOpt().get().equals(eventContext));
+    assertTrue(result.getServiceCodeOpt().get().equals(serviceCode));
+    assertNotNull(result.getEventTimestamp());
   }
+
 }

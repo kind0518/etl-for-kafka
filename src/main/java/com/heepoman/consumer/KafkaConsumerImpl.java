@@ -75,5 +75,6 @@ public class KafkaConsumerImpl implements Consumer {
     }
 
   }
+
 }
 

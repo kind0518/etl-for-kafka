@@ -1,18 +1,15 @@
 package com.heepoman.stream.transform;
 
-import com.heepoman.model.Event;
 import com.heepoman.repo.EventMySqlRepository;
 import com.heepoman.window.EventSlidingWindow;
 import com.heepoman.window.Window;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import static org.mockito.Mockito.*;
 
@@ -35,6 +32,7 @@ public class DeduplicationTransFormTest extends TransFormTestKit {
     deduplicationTransform.process(payload, slidingWindow, eventRepo);
   }
 
+  @Ignore
   @Test
   public void processWhenDuplicated() {
     String payloadForDuplicated = String.format(
@@ -43,4 +41,5 @@ public class DeduplicationTransFormTest extends TransFormTestKit {
 
     deduplicationTransform.process(payloadForDuplicated, slidingWindow, eventRepo);
   }
+
 }

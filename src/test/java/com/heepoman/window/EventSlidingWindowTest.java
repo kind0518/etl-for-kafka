@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 public class EventSlidingWindowTest {
@@ -25,4 +24,5 @@ public class EventSlidingWindowTest {
 
     assertTrue(sWindow.setData(newEvent));
   }
+
 }

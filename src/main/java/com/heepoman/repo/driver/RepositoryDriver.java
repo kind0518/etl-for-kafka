@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 public interface RepositoryDriver {
 
-  public void init();
+  Connection getConnection() throws SQLException;
 
-  public Connection getConnection() throws SQLException;
 }

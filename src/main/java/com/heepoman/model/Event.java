@@ -4,10 +4,10 @@ import java.util.Optional;
 
 public class Event {
 
-  public Long eventId;
-  public String eventTimestamp;
-  public Optional<String> serviceCodeOpt;
-  public Optional<String> eventContextOpt;
+  private final Long eventId;
+  private final String eventTimestamp;
+  private final Optional<String> serviceCodeOpt;
+  private final Optional<String> eventContextOpt;
 
   public Event(Long eventId, String eventTimestamp, Optional<String> serviceCodeOpt, Optional<String> eventContextOpt) {
     this.eventId = eventId;
@@ -15,4 +15,21 @@ public class Event {
     this.serviceCodeOpt = serviceCodeOpt;
     this.eventContextOpt = eventContextOpt;
   }
+
+  public Long getEventId() {
+    return eventId;
+  }
+
+  public String getEventTimestamp() {
+    return eventTimestamp;
+  }
+
+  public Optional<String> getServiceCodeOpt() {
+    return serviceCodeOpt;
+  }
+
+  public Optional<String> getEventContextOpt() {
+    return eventContextOpt;
+  }
+
 }

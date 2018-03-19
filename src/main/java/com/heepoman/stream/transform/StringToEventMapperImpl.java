@@ -11,7 +11,7 @@ public class StringToEventMapperImpl implements Mapper<String, Event> {
 
   @Override
   public Event map(String payload) {
-    HashMap<String, String> holder = new HashMap();
+    final HashMap<String, String> holder = new HashMap();
 
     Arrays.stream(payload.replaceAll(" ", "").trim().split(","))
             .map(s -> s.split(":", 2))
@@ -23,4 +23,5 @@ public class StringToEventMapperImpl implements Mapper<String, Event> {
             Optional.ofNullable(holder.get("service_code")),
             Optional.ofNullable(holder.get("event_context")));
   }
+
 }

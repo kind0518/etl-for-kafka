@@ -17,15 +17,18 @@ import java.util.concurrent.TimeUnit;
 
 public class IntergrationTest {
 
-  /*
-  <Test scenarios>
-
-   - Integration testing makes the window size 10 seconds for smooth testing.
-   - The first payload and the second payload are in the same window,
-     and the data is different. In this case, both data are loaded into the database.
-   - The first payload and The last payload are exactly the same data values ​​except for the timestamp.
-     Since both payloads timestamp difference is more than 10 seconds, the last payload is loaded into the database in this case.
-  */
+  /**
+   *
+   * Test Scenarios
+   *
+   * - Integration testing makes the window size 10 seconds for smooth testing.
+   * - The first payload and the second payload are in the same window, and the data is different.
+   *   In this case, both data are loaded into the database.
+   * - The first payload and The last payload are exactly the same data values ​​except for the timestamp.
+   *   Since both payloads timestamp difference is more than 10 seconds, the last payload is loaded into the database in this case.
+   *
+   *   @author Ahn Heesuk
+   **/
 
   public EventMySqlRepository repo =  new EventMySqlRepository();
   @Test
@@ -61,6 +64,6 @@ public class IntergrationTest {
     kafkaProducerScheduler.schedule(() -> {
       producer.kafkaProducer.send(new ProducerRecord<String, String>(topic, lastPldForSameFirstPld));
     }, 10, TimeUnit.SECONDS);
-
   }
+
 }

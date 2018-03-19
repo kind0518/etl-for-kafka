@@ -10,10 +10,10 @@ import java.util.concurrent.CompletableFuture;
 
 public class StreamContext {
 
-  Consumer consumer;
-  Window window;
-  Repository repo;
-  TransForm transform;
+  private final Consumer consumer;
+  private final Window window;
+  private final Repository repo;
+  private final TransForm transform;
 
   public StreamContext(StreamContextBuilder builder) {
     this.consumer = builder.consumer;

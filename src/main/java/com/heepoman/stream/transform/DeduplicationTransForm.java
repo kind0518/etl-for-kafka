@@ -14,10 +14,10 @@ import java.util.Set;
 
 public class DeduplicationTransForm implements TransForm<String> {
 
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  private Set<String> filterKeys;
-  private String targetWindow;
+  private final Set<String> filterKeys;
+  private final String targetWindow;
 
   public DeduplicationTransForm(Set<String> filterKeys, String targetWindow) {
     this.filterKeys = filterKeys;
@@ -39,7 +39,6 @@ public class DeduplicationTransForm implements TransForm<String> {
     return isDuplicatedByFilters;
   }
 
-
   @Override
   public void process(String data, Window window, Repository repo) {
     if (this.targetWindow.equals("event-window")) {
@@ -49,7 +48,7 @@ public class DeduplicationTransForm implements TransForm<String> {
         esw.keepWindowSizeForDuration(newEvent);
 
         boolean isExistData = esw.getWindowTable().stream().anyMatch(existingEvent -> {
-          Set<Boolean> isDupByFilterKeys = checkDuplicateByFilterKeys(existingEvent, newEvent, this.filterKeys);
+          Set<Boolean> isDupByFilterKeys = checkDuplicateByFilterKeys(existingEvent, newEvent, filterKeys);
           boolean isContainTrue = isDupByFilterKeys.contains(true);
           boolean isSizeOne = isDupByFilterKeys.size() == 1;
           return isContainTrue && isSizeOne;
@@ -67,6 +66,6 @@ public class DeduplicationTransForm implements TransForm<String> {
       throw new InvalidParameterException("your target window is invalid. make sure the target window is `event-window`");
       //TODO: can be implemented other event window type & refactoring for flexible.
     }
-
   }
+
 }

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
-public class EventSlidingWindow extends Window<Event>{
+public class EventSlidingWindow extends Window<Event> {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
   private long duration;
@@ -44,8 +44,8 @@ public class EventSlidingWindow extends Window<Event>{
     synchronized(this){
       eventWindowTable.removeIf((Event event) ->
               isDataTimeBeforeDuration(
-                      event.eventTimestamp,
-                      data.eventTimestamp,
+                      event.getEventTimestamp(),
+                      data.getEventTimestamp(),
                       this.duration));
     }
   }

@@ -18,12 +18,12 @@ import java.util.concurrent.CompletableFuture;
 
 public class EventMySqlRepository implements Repository<Optional<Event>> {
 
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
-  private ConnectionPool repo;
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final ConnectionPool repo;
   private final Mapper<ResultSet, Optional<Event>> toEventOpt = new EventMapperImpl();
 
   public EventMySqlRepository() {
-    this.repo = new ConnectionPoolImpl.ConnectionPoolBuilder(new MySqlDriver()).build();
+    repo = new ConnectionPoolImpl.ConnectionPoolBuilder(new MySqlDriver()).build();
   }
 
   @Override
@@ -37,7 +37,7 @@ public class EventMySqlRepository implements Repository<Optional<Event>> {
           stmtOpt = Optional.of(connOpt.get().createStatement());
           if (eventOpt.isPresent()) {
             final Event e = eventOpt.get();
-            stmtOpt.get().executeUpdate(new CreateEventSQLSpecImpl(e.eventId, e.eventTimestamp, e.serviceCodeOpt, e.eventContextOpt).toQuery());
+            stmtOpt.get().executeUpdate(new CreateEventSQLSpecImpl(e.getEventId(), e.getEventTimestamp(), e.getServiceCodeOpt(), e.getEventContextOpt()).toQuery());
           } else {
             logger.error("parameter `event` does not exist.");
           }

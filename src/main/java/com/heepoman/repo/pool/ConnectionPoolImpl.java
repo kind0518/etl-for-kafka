@@ -11,15 +11,14 @@ import java.util.concurrent.*;
 
 public class ConnectionPoolImpl implements ConnectionPool {
 
-  private static final int DEFAULT_TIMEOUT = 5;
   private static final int DEFAULT_POOL_SIZE = 5;
   private static final int HEALTH_CHECK_INTERVAL = 5;
 
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
-  private int poolSize;
-  private BlockingQueue<Connection> connectionPool;
-  private RepositoryDriver driver;
-  private ScheduledExecutorService checkHealthPool = Executors.newSingleThreadScheduledExecutor();
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final int poolSize;
+  private final BlockingQueue<Connection> connectionPool;
+  private final RepositoryDriver driver;
+  private final ScheduledExecutorService checkHealthPool = Executors.newSingleThreadScheduledExecutor();
 
   private Boolean isClosedForConnection(Connection c) {
     try {
@@ -57,7 +56,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
   @Override
   public synchronized Connection getConnectionFromPool() throws ConnectionPoolException {
     try {
-      if (connectionPool.isEmpty()) this.createConnection();
+      if (connectionPool.isEmpty()) createConnection();
       return connectionPool.take();
     } catch (InterruptedException ex) {
       logger.error(ex.getMessage());
@@ -66,18 +65,19 @@ public class ConnectionPoolImpl implements ConnectionPool {
   }
 
   public static class ConnectionPoolBuilder {
+
     private int poolSize;
     private BlockingQueue<Connection> connectionPool;
-    private RepositoryDriver driver;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final RepositoryDriver driver;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public ConnectionPoolBuilder(RepositoryDriver driver) {
       this.driver = driver;
       this.poolSize = DEFAULT_POOL_SIZE;
-      this.connectionPool = init(this.poolSize);
+      this.connectionPool = init(poolSize);
     }
 
-    private BlockingQueue<Connection> init(int poolSize) {
+    private final BlockingQueue<Connection> init(int poolSize) {
       BlockingQueue<Connection> pool = new LinkedBlockingQueue<Connection>(poolSize);
       for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
         try {
@@ -100,6 +100,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
     public ConnectionPoolImpl build() {
       return new ConnectionPoolImpl(this);
     }
+
   }
 
 }

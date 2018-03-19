@@ -1,6 +1,5 @@
 package com.heepoman.repo.driver;
 
-import com.heepoman.repo.driver.MySqlDriver;
 import org.junit.Test;
 
 import java.sql.SQLException;

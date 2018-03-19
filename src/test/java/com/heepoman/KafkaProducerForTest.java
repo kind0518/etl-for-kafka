@@ -18,4 +18,5 @@ public class KafkaProducerForTest {
 
     this.kafkaProducer = new KafkaProducer(props);
   }
+
 }

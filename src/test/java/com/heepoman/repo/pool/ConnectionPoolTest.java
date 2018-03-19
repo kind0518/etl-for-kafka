@@ -1,10 +1,8 @@
 package com.heepoman.repo.pool;
 
-import com.heepoman.repo.exception.ConnectionPoolException;
 import com.heepoman.repo.driver.MySqlDriver;
 import com.heepoman.repo.driver.RepositoryDriver;
-import com.heepoman.repo.pool.ConnectionPool;
-import com.heepoman.repo.pool.ConnectionPoolImpl;
+import com.heepoman.repo.exception.ConnectionPoolException;
 import org.junit.Test;
 
 import java.sql.SQLException;

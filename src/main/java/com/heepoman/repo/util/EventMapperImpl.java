@@ -1,6 +1,7 @@
 package com.heepoman.repo.util;
 
 import com.heepoman.model.Event;
+import com.heepoman.repo.table.EventTable;
 import com.heepoman.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,20 +13,16 @@ import java.util.Optional;
 public class EventMapperImpl implements Mapper<ResultSet, Optional<Event>> {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-  private static final String EVENT_ID = "event_id";
-  private static final String EVENT_TIMESTAMP = "event_timestamp";
-  private static final String SERVICE_CODE = "service_code";
-  private static final String EVENT_CONTEXT = "event_context";
+  private final EventTable eventTable = EventTable.getInstance();
 
   @Override
   public Optional<Event> map(ResultSet rs) {
     try {
       if (rs.first()) {
-        Long eventId = rs.getLong(EVENT_ID);
-        String eventTimestamp = rs.getString(EVENT_TIMESTAMP);
-        Optional<String> serviceCodeOpt = Optional.ofNullable(rs.getString(SERVICE_CODE));
-        Optional<String> eventContextOpt = Optional.ofNullable(rs.getString(EVENT_CONTEXT));
+        Long eventId = rs.getLong(eventTable.getEventIdColumn());
+        String eventTimestamp = rs.getString(eventTable.getTimestampColumn());
+        Optional<String> serviceCodeOpt = Optional.ofNullable(rs.getString(eventTable.getServiceCodeColumn()));
+        Optional<String> eventContextOpt = Optional.ofNullable(rs.getString(eventTable.getEventContextColumn()));
         return Optional.of(new Event(eventId, eventTimestamp, serviceCodeOpt, eventContextOpt));
       } else {
         return Optional.empty();
@@ -35,4 +32,5 @@ public class EventMapperImpl implements Mapper<ResultSet, Optional<Event>> {
       return Optional.empty();
     }
   }
+
 }

@@ -7,7 +7,6 @@ import com.heepoman.stream.transform.DeduplicationTransForm;
 import com.heepoman.stream.transform.TransForm;
 import com.heepoman.window.EventSlidingWindow;
 import com.heepoman.window.Window;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 public class KafkaConsumerImplSpec extends KafkaConsumerTestKit {
 
@@ -35,4 +33,5 @@ public class KafkaConsumerImplSpec extends KafkaConsumerTestKit {
     consumer.subscribeAsync(deduplicationTransform, eventSlidingWindow, repo);
     verify(deduplicationTransform, times(1)).process(any(), any(), any());
   }
+
 }

@@ -34,6 +34,4 @@ public class KafkaConsumerTestKit {
     producer.send(new ProducerRecord(topic, pld));
   }
 
-
-
 }

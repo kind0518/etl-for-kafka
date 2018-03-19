@@ -23,7 +23,7 @@ public class CreateEventSQLSpecImpl implements SQLSpec {
   public String toQuery() {
     return String.format(
             "INSERT INTO %s VALUES (%d, '%s', '%s', '%s')",
-            eventTable.TABLE_NAME,
+            eventTable.getTableName(),
             eventId,
             eventTimestamp,
             serviceCodeOpt.orElse(null),

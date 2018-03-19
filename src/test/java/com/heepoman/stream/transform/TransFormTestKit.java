@@ -20,4 +20,5 @@ public class TransFormTestKit {
     this.eventTable = new LinkedBlockingQueue<Event>();
     this.eventTable.add(new Event(eventId, datetime, Optional.of(serviceCode), Optional.of(eventContext)));
   }
+
 }
