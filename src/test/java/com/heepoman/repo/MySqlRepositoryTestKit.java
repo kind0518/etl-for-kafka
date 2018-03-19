@@ -10,7 +10,9 @@ import java.util.Date;
 
 public class MySqlRepositoryTestKit {
 
-  private MySqlDriver driver = new MySqlDriver();
+  protected MySqlDriver driver = new MySqlDriver();
+  protected Connection conn;
+  protected Statement stmt;
 
   protected Long eventId = 12345678911L;
   protected String eventTimestamp = new Date().toString();

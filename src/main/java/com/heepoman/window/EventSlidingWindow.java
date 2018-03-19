@@ -43,7 +43,7 @@ public class EventSlidingWindow implements Window<Event> {
     }
   }
 
-  private void keepWindowSizeForDuration(String currentTimestamp) {
+  private synchronized void keepWindowSizeForDuration(String currentTimestamp) {
     eventWindowTable.removeIf((Event event) -> isDataTimeBeforeDuration(event.getEventTimestamp(), currentTimestamp, duration));
   }
 

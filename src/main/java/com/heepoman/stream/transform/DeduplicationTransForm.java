@@ -7,6 +7,7 @@ import com.heepoman.window.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.Optional;
@@ -30,10 +31,13 @@ public class DeduplicationTransForm implements TransForm<String> {
         try {
           String methodPrefix = "get";
           String methodName = methodPrefix + filterKey;
-          System.out.println(newEvent.getClass().getDeclaredMethod(methodName));
-          Object newEventFieldValue = newEvent.getClass().getDeclaredMethod(methodName);
-          isDuplicatedByFilters.add(existingEvent.getClass().getDeclaredMethod(methodName).equals(newEventFieldValue));
+          Object newEventFieldValue = newEvent.getClass().getDeclaredMethod(methodName).invoke(newEvent);
+          isDuplicatedByFilters.add(existingEvent.getClass().getDeclaredMethod(methodName).invoke(existingEvent).equals(newEventFieldValue));
         } catch (NoSuchMethodException ex) {
+          logger.error(ex.getMessage());
+        } catch (InvocationTargetException ex) {
+          logger.error(ex.getMessage());
+        } catch (IllegalAccessException ex) {
           logger.error(ex.getMessage());
         }
       });

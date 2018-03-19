@@ -4,10 +4,10 @@ import com.heepoman.repo.table.EventTable;
 
 public class EventInfo {
 
-  private final String EVENT_ID_FIELD = "eventId";
-  private final String TIMESTAMP_FIELD = "eventTimestamp";
-  private final String SERVICE_CODE_FIELD = "serviceCodeOpt";
-  private final String EVENT_CONTEXT_FIELD = "eventContextOpt";
+  private final String EVENT_ID_FIELD = "EventId";
+  private final String TIMESTAMP_FIELD = "EventTimestamp";
+  private final String SERVICE_CODE_FIELD = "ServiceCodeOpt";
+  private final String EVENT_CONTEXT_FIELD = "EventContextOpt";
 
   private static class SingletonHelper {
     static final EventInfo INSTANCE = new EventInfo();
