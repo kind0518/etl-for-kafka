@@ -18,9 +18,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class KafkaConsumerImpl implements Consumer {
 
-  private KafkaConsumer consumer;
-  private List<String> topics;
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final KafkaConsumer consumer;
+  private final List<String> topics;
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public KafkaConsumerImpl(KafkaConsumerBuilder builder) {
     Properties props = new Properties();

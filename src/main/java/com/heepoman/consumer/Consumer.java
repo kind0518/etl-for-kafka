@@ -8,6 +8,6 @@ import com.heepoman.window.Window;
 
 public interface Consumer {
 
-  public CompletableFuture<Void> subscribeAsync(TransForm transform, Window window, Repository repo);
+  CompletableFuture<Void> subscribeAsync(TransForm transform, Window window, Repository repo);
 
 }
