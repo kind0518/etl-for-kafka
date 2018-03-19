@@ -28,11 +28,10 @@ public class IntergrationTest extends MySqlRepositoryTestKit {
    * Test Scenarios
    *
    * - Integration testing makes the window size 10 seconds for smooth testing.
-   * - The first payload and the second payload are in the same window, and the data is different.
-   *   In this case, both data are loaded into the database.
-   * - The first payload and The last payload are exactly the same data values ​​except for the timestamp.
-   *   Since both payloads timestamp difference is more than 10 seconds, the last payload is loaded into the database in this case.
-   *
+   * - The first payload and the second and last payload are in the same window.
+   * - first payload and last payload are the same.
+   * - In this case, last payload not loaded to database.
+   * 
    *   @author Ahn Heesuk
    **/
 
