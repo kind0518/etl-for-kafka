@@ -31,7 +31,7 @@ public class IntergrationTest extends MySqlRepositoryTestKit {
    * - The first payload and the second and last payload are in the same window.
    * - first payload and last payload are the same.
    * - In this case, last payload not loaded to database.
-   * 
+   *
    *   @author Ahn Heesuk
    **/
 
@@ -43,12 +43,12 @@ public class IntergrationTest extends MySqlRepositoryTestKit {
     }
   }
 
-  private void checkRowHelper(int expectedRow, long targetEventId) {
+  private void checkRowHelper(int expectedRow) {
     try {
       conn = driver.getConnection();
       stmt = conn.createStatement();
       int actualRowSize = 0;
-      ResultSet rs = stmt.executeQuery("SELECT * FROM event WHERE event_id = targetEventId");
+      ResultSet rs = stmt.executeQuery("SELECT * FROM event WHERE event_id = 12345678912");
       while(rs.next()) {
         actualRowSize += 1;
       }
@@ -109,7 +109,7 @@ public class IntergrationTest extends MySqlRepositoryTestKit {
 
     schedulerWaitHelper(kafkaProducerScheduler, 11, TimeUnit.SECONDS);
 
-    checkRowHelper(2, 12345678912L);
+    checkRowHelper(2);
   }
 
 }
