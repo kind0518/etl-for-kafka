@@ -1,4 +1,5 @@
 import com.heepoman.consumer.KafkaConsumerImpl;
+import com.heepoman.model.EventInfo;
 import com.heepoman.repo.EventMySqlRepository;
 import com.heepoman.stream.StreamContext;
 import com.heepoman.stream.transform.DeduplicationTransForm;
@@ -14,12 +15,16 @@ public class Main {
     final long TEN_MINUTE = 10 * 60 * 1000;
     final List<String> topics = Arrays.asList("test");
     final String targetWindow = "event-window";
-    HashSet<String> filterByKeys = new HashSet<String>(Arrays.asList("eventId", "serviceCodeOpt", "eventContextOpt"));
+    final EventInfo eventInfo = EventInfo.getInstance();
+    final HashSet<String> filterByKeys = new HashSet<String>(
+            Arrays.asList(eventInfo.getEventIdField(),
+                    eventInfo.getServiceCodeField(),
+                    eventInfo.getEventContextField()));
 
     new StreamContext
       .StreamContextBuilder()
       .setConsumer(new KafkaConsumerImpl.KafkaConsumerBuilder(topics).build())
-      .setTransform(new DeduplicationTransForm(filterByKeys,targetWindow))
+      .setTransform(new DeduplicationTransForm(filterByKeys, targetWindow))
       .setWindow(new EventSlidingWindow(TEN_MINUTE))
       .setOutput(new EventMySqlRepository())
       .startPipeline();

@@ -1,6 +1,7 @@
 package com.heepoman;
 
 import com.heepoman.consumer.KafkaConsumerImpl;
+import com.heepoman.model.EventInfo;
 import com.heepoman.repo.EventMySqlRepository;
 import com.heepoman.stream.StreamContext;
 import com.heepoman.stream.transform.DeduplicationTransForm;
@@ -36,7 +37,8 @@ public class IntergrationTest {
     final long TEN_SECONDS = 10 * 1000;
 
     final String topic = "test";
-    Set<String> filterKeys = new HashSet<String>(Arrays.asList("eventId", "serviceCodeOpt", "eventContextOpt"));
+    EventInfo eventInfo = EventInfo.getInstance();
+    Set<String> filterKeys = new HashSet<String>(Arrays.asList(eventInfo.getEventIdField(), eventInfo.getServiceCodeField(), eventInfo.getEventContextField()));
     String firstPld = "event_id: 12345678911, event_timestamp: 2018-03-18T07:10:30+0000, service_code: SERVICE_CODE, event_context: EVENT_CONTEXT";
     String secondPld = "event_id: 12345678911, event_timestamp: 2018-03-18T07:10:35+0000";
     String lastPldForSameFirstPld = "event_id: 12345678911, event_timestamp: 2018-03-18T07:10:41+0000, service_code: SERVICE_CODE, event_context: EVENT_CONTEXT";

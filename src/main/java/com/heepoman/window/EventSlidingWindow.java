@@ -8,13 +8,17 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class EventSlidingWindow extends Window<Event> {
+public class EventSlidingWindow implements Window<Event> {
 
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
-  private long duration;
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final long duration;
+  private final LinkedBlockingQueue<Event> eventWindowTable = new LinkedBlockingQueue<Event>();
 
   public EventSlidingWindow(long duration) {
     this.duration = duration;
@@ -39,15 +43,8 @@ public class EventSlidingWindow extends Window<Event> {
     }
   }
 
-  @Override
-  public void keepWindowSizeForDuration(Event data) {
-    synchronized(this){
-      eventWindowTable.removeIf((Event event) ->
-              isDataTimeBeforeDuration(
-                      event.getEventTimestamp(),
-                      data.getEventTimestamp(),
-                      this.duration));
-    }
+  private void keepWindowSizeForDuration(String currentTimestamp) {
+    eventWindowTable.removeIf((Event event) -> isDataTimeBeforeDuration(event.getEventTimestamp(), currentTimestamp, duration));
   }
 
   @Override
@@ -56,7 +53,8 @@ public class EventSlidingWindow extends Window<Event> {
   }
 
   @Override
-  public BlockingQueue<Event> getWindowTable() {
-    return this.eventWindowTable;
+  public List<Event> getDataForDuration(Event newEvent) {
+    keepWindowSizeForDuration(newEvent.getEventTimestamp());
+    return new LinkedList<>(eventWindowTable);
   }
 }

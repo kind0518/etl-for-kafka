@@ -2,17 +2,14 @@ package com.heepoman.window;
 
 import com.heepoman.model.Event;
 
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public abstract class Window<T> {
+public interface Window<T> {
 
-  protected BlockingQueue<T> eventWindowTable = new LinkedBlockingQueue<T>();
+  boolean setData(T data);
 
-  public abstract boolean setData(T data);
-
-  public abstract void keepWindowSizeForDuration(T data);
-
-  public abstract BlockingQueue<T> getWindowTable();
+  List<T> getDataForDuration(T data);
 
 }
